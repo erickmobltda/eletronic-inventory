@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Electronics Inventory</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔌</text></svg>">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Electronics Inventory</h1>
+      <span class="muted" id="updated" data-build="__BUILD__"></span>
+    </div>
+    <div class="search">
+      <input id="q" type="search" placeholder="Search name, specs, notes…  ( / )" autocomplete="off">
+    </div>
+    <button id="theme" class="btn ghost" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#inventory" data-view="inventory">Inventory</a>
+    <a href="#cards" data-view="cards">Cards</a>
+    <a href="#projects" data-view="projects">Projects</a>
+    <a href="#insights" data-view="insights">Insights</a>
+  </nav>
+
+  <main>
+    <section class="stats" id="stats"></section>
+
+    <section class="filters" id="filters">
+      <label>Category <select id="f-category"></select></label>
+      <label>Status <select id="f-status"></select></label>
+      <label>Project <select id="f-project"></select></label>
+      <label>Interface <select id="f-iface"></select></label>
+      <button class="btn ghost" id="clear">Clear filters</button>
+      <span class="spacer"></span>
+      <div class="cols-wrap" id="cols-wrap">
+        <button class="btn" id="cols-btn" aria-expanded="false">Columns ▾</button>
+        <div class="cols-menu" id="cols-menu" hidden></div>
+      </div>
+    </section>
+
+    <section id="view"></section>
+  </main>
+
+  <aside class="drawer" id="drawer" hidden>
+    <div class="drawer-inner">
+      <button class="btn ghost close" id="drawer-close" aria-label="Close">✕</button>
+      <div id="drawer-body"></div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

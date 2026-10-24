@@ -1,0 +1,516 @@
+{
+  "projects": [
+    {
+      "id": "painel-esp32",
+      "name": "Painel",
+      "status": "active",
+      "description": "Waveshare ESP32-Touch-LCD-3.5 com controle do Spotify, jogo Capitã Maeva, app de pintura e app de leitura.",
+      "repo": "https://github.com/erickmobltda/painel-esp32",
+      "components": [
+        { "id": "waveshare-esp32-touch-lcd-35", "qty": 1 }
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "rpi-3b",
+      "name": "Raspberry Pi 3 Model B",
+      "category": "Single-board computer",
+      "quantity": 1,
+      "voltage": "5V (micro-USB, 2.5A)",
+      "interfaces": ["GPIO", "I2C", "SPI", "UART", "I2S", "USB", "HDMI", "Ethernet", "Wi-Fi", "Bluetooth"],
+      "description": "Quad-core ARM board running Linux. 40-pin GPIO header compatible with HATs.",
+      "specs": {
+        "SoC": "Broadcom BCM2837, 4× Cortex-A53 @ 1.2 GHz (64-bit)",
+        "RAM": "1 GB LPDDR2",
+        "Wireless": "Wi-Fi 802.11n 2.4 GHz, Bluetooth 4.1 + BLE",
+        "USB": "4× USB 2.0",
+        "Ethernet": "10/100 Mbit",
+        "Video": "Full-size HDMI, DSI display connector, CSI camera connector",
+        "Audio": "3.5 mm jack (audio + composite video)",
+        "GPIO": "40-pin header, 3.3V logic (not 5V tolerant)",
+        "Storage": "microSD",
+        "Power": "5V / 2.5A via micro-USB"
+      },
+      "links": [
+        { "label": "Product page", "url": "https://www.raspberrypi.com/products/raspberry-pi-3-model-b/" },
+        { "label": "GPIO pinout", "url": "https://pinout.xyz/" }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "wm8960-audio-hat",
+      "name": "WM8960 Audio HAT",
+      "category": "Audio",
+      "quantity": 1,
+      "voltage": "5V supply, 3.3V logic",
+      "interfaces": ["I2C", "I2S"],
+      "description": "Raspberry Pi HAT with stereo codec, speaker amplifier, headphone output and dual on-board microphones.",
+      "specs": {
+        "Codec": "WM8960",
+        "Power supply": "5V",
+        "Logic voltage": "3.3V",
+        "Control interface": "I2C",
+        "Audio interface": "I2S",
+        "DAC SNR": "98 dB",
+        "ADC SNR": "94 dB",
+        "Headphone driver": "40 mW (16Ω @ 3.3V)",
+        "Speaker driver": "1 W per channel (8Ω BTL)",
+        "Microphones": "2× on-board (stereo recording)",
+        "Outputs": "3.5 mm headphone jack, 2× speaker connectors"
+      },
+      "links": [
+        { "label": "Waveshare wiki", "url": "https://www.waveshare.com/wiki/WM8960_Audio_HAT" }
+      ],
+      "notes": "Pairs with the 8Ω 5W speaker."
+    },
+    {
+      "id": "speaker-8ohm-5w",
+      "name": "Speaker 8Ω 5W",
+      "category": "Audio",
+      "quantity": 1,
+      "voltage": "",
+      "interfaces": [],
+      "description": "Passive speaker. Needs an amplifier (WM8960 HAT, DFPlayer Mini, etc.).",
+      "specs": {
+        "Impedance": "8Ω",
+        "Power": "5 W"
+      },
+      "links": [],
+      "notes": "The WM8960 drives up to 1 W into it; the DFPlayer up to 3 W."
+    },
+    {
+      "id": "esp32-devkit",
+      "name": "ESP32 dev board (ESP-WROOM-32)",
+      "category": "Microcontroller",
+      "quantity": 1,
+      "voltage": "5V via USB / 3.3V logic",
+      "interfaces": ["GPIO", "I2C", "SPI", "UART", "I2S", "ADC", "DAC", "PWM", "Wi-Fi", "Bluetooth"],
+      "description": "Dual-core Wi-Fi + Bluetooth microcontroller board from the ESP32 starter kit.",
+      "specs": {
+        "Module": "ESP-WROOM-32 (assumed: check the metal shield marking)",
+        "CPU": "Xtensa LX6 dual-core @ 240 MHz",
+        "Memory": "520 KB SRAM, 4 MB flash (typical)",
+        "Wireless": "Wi-Fi 802.11 b/g/n 2.4 GHz, Bluetooth 4.2 (Classic + BLE)",
+        "ADC": "Up to 18 channels, 12-bit (ADC2 unusable while Wi-Fi is on)",
+        "DAC": "2× 8-bit (GPIO 25, 26)",
+        "Touch": "10 capacitive touch pins",
+        "Logic level": "3.3V (not 5V tolerant)",
+        "USB": "micro-USB with USB-UART bridge (CP2102 or CH340)",
+        "Pins": "30 or 38 pin versions"
+      },
+      "links": [
+        { "label": "ESP32 datasheet", "url": "https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf" },
+        { "label": "Pinout reference", "url": "https://randomnerdtutorials.com/esp32-pinout-reference-gpios/" }
+      ],
+      "source": "ESP32 starter kit",
+      "notes": "Avoid GPIO 6–11 (flash). GPIO 34–39 are input-only."
+    },
+    {
+      "id": "waveshare-esp32-touch-lcd-35",
+      "name": "Waveshare ESP32-Touch-LCD-3.5",
+      "category": "Microcontroller",
+      "quantity": 1,
+      "voltage": "5V via USB-C or Li-ion 3.7V",
+      "interfaces": ["SPI", "I2C", "I2S", "Wi-Fi", "Bluetooth", "USB"],
+      "description": "ESP32 board with a 3.5\" capacitive touch IPS screen, audio codec, battery charger and microSD slot.",
+      "specs": {
+        "Chip": "ESP32-D0WDR2-V3, dual-core 240 MHz",
+        "Memory": "520 KB SRAM + 2 MB PSRAM + 16 MB flash",
+        "Display": "3.5\" IPS 320×480, ST7796S (SPI)",
+        "Touch": "FT6336 capacitive (I2C)",
+        "Audio": "ES8311 codec + MX1.25 speaker connector",
+        "Power": "AXP2101 PMU + MX1.25 Li-ion 3.7V connector",
+        "IO expander": "TCA9554",
+        "Other": "PCF85063 RTC, microSD slot, microphone, USB-C"
+      },
+      "links": [
+        { "label": "Product page", "url": "https://www.waveshare.com/esp32-touch-lcd-3.5.htm" },
+        { "label": "Wiki", "url": "https://www.waveshare.com/wiki/ESP32-Touch-LCD-3.5" }
+      ],
+      "notes": "Not the same board as the ESP32-S3-Touch-LCD-3.5."
+    },
+    {
+      "id": "oled-096",
+      "name": "OLED display 0.96\"",
+      "category": "Display",
+      "quantity": 1,
+      "voltage": "3.3–5V",
+      "interfaces": ["I2C"],
+      "description": "Monochrome 128×64 OLED display.",
+      "specs": {
+        "Controller": "SSD1306",
+        "Resolution": "128×64",
+        "Interface": "I2C (address 0x3C, sometimes 0x3D)",
+        "Pins": "GND, VCC, SCL, SDA",
+        "ESP32 wiring": "SDA → GPIO 21, SCL → GPIO 22"
+      },
+      "links": [
+        { "label": "Adafruit SSD1306 library", "url": "https://github.com/adafruit/Adafruit_SSD1306" },
+        { "label": "ESP32 tutorial", "url": "https://randomnerdtutorials.com/esp32-ssd1306-oled-display-arduino-ide/" }
+      ],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "breadboard-830",
+      "name": "Breadboard 830 points",
+      "category": "Prototyping",
+      "quantity": 1,
+      "voltage": "",
+      "interfaces": [],
+      "description": "Full-size solderless breadboard with two power rails on each side.",
+      "specs": {
+        "Tie points": "830 (630 terminal + 200 distribution)"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Some boards split the power rails in the middle."
+    },
+    {
+      "id": "ir-obstacle-sensor",
+      "name": "IR obstacle sensor module",
+      "category": "Sensor",
+      "quantity": 1,
+      "voltage": "3.3–5V",
+      "interfaces": ["Digital"],
+      "description": "Infrared emitter/receiver pair with an LM393 comparator. Output goes LOW when an obstacle is detected.",
+      "specs": {
+        "Model": "FC-51 (typical)",
+        "Range": "2–30 cm (adjust with the trimpot)",
+        "Output": "Digital, active LOW",
+        "Pins": "VCC, GND, OUT"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Affected by sunlight and dark/matte surfaces."
+    },
+    {
+      "id": "ldr-module",
+      "name": "Photoresistor (LDR) light sensor module",
+      "category": "Sensor",
+      "quantity": 1,
+      "voltage": "3.3–5V",
+      "interfaces": ["Digital", "ADC"],
+      "description": "Light sensor with an analog output and a comparator digital output.",
+      "specs": {
+        "Comparator": "LM393",
+        "Outputs": "AO (analog), DO (digital, threshold via trimpot)",
+        "Pins": "VCC, GND, DO, AO (3-pin versions have DO only)"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "On ESP32 read AO with an ADC1 pin (GPIO 32–39) so it works with Wi-Fi on."
+    },
+    {
+      "id": "dht11",
+      "name": "DHT11 temperature & humidity module",
+      "category": "Sensor",
+      "quantity": 1,
+      "voltage": "3.3–5.5V",
+      "interfaces": ["Single-wire"],
+      "description": "Low-cost digital temperature and humidity sensor.",
+      "specs": {
+        "Temperature": "0–50 °C, ±2 °C",
+        "Humidity": "20–90% RH, ±5%",
+        "Sample rate": "1 Hz max",
+        "Protocol": "Proprietary single-wire",
+        "Pins": "VCC, DATA, GND (module has the pull-up)"
+      },
+      "links": [
+        { "label": "DHT sensor library", "url": "https://github.com/adafruit/DHT-sensor-library" }
+      ],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "pir-hc-sr501",
+      "name": "PIR motion sensor HC-SR501",
+      "category": "Sensor",
+      "quantity": 1,
+      "voltage": "4.5–20V supply, 3.3V output",
+      "interfaces": ["Digital"],
+      "description": "Passive infrared motion detector with adjustable sensitivity and hold time.",
+      "specs": {
+        "Range": "3–7 m (adjustable)",
+        "Angle": "~110°",
+        "Hold time": "~3 s to ~5 min (adjustable)",
+        "Trigger": "Jumper: single (L) or repeat (H)",
+        "Output": "HIGH (3.3V) on motion, safe for ESP32",
+        "Warm-up": "~1 min after power-on"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Power from 5V (VIN), connect OUT directly to a GPIO."
+    },
+    {
+      "id": "pot-10k",
+      "name": "Potentiometer 10kΩ",
+      "category": "Input",
+      "quantity": 1,
+      "voltage": "",
+      "interfaces": ["ADC"],
+      "description": "Rotary potentiometer, used as a voltage divider for analog input.",
+      "specs": {
+        "Resistance": "10kΩ"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "tactile-button",
+      "name": "Tactile push buttons",
+      "category": "Input",
+      "quantity": null,
+      "voltage": "",
+      "interfaces": ["Digital"],
+      "description": "Momentary push buttons for breadboards.",
+      "specs": {
+        "Size": "6×6 mm, 4 pins (typical)"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Quantity not specified in the kit list. Use INPUT_PULLUP on the ESP32."
+    },
+    {
+      "id": "buzzer-passive",
+      "name": "Passive buzzer",
+      "category": "Output",
+      "quantity": 1,
+      "voltage": "3.3–5V",
+      "interfaces": ["PWM"],
+      "description": "Needs a square wave to make sound, so it can play different tones.",
+      "specs": {
+        "Drive": "PWM / tone() at the desired frequency"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Usually the one without the sticker, with the green PCB visible underneath."
+    },
+    {
+      "id": "buzzer-active",
+      "name": "Active buzzer",
+      "category": "Output",
+      "quantity": 1,
+      "voltage": "3.3–5V",
+      "interfaces": ["Digital"],
+      "description": "Built-in oscillator: beeps at a fixed tone when powered.",
+      "specs": {
+        "Drive": "Digital HIGH = beep"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Usually sealed underneath, often with a sticker on top."
+    },
+    {
+      "id": "relay-2ch-5v",
+      "name": "Relay module 2 channels 5V",
+      "category": "Output",
+      "quantity": 1,
+      "voltage": "5V coil",
+      "interfaces": ["Digital"],
+      "description": "Two optocoupler-isolated relays for switching loads.",
+      "specs": {
+        "Relay": "SRD-05VDC-SL-C (typical)",
+        "Contact rating": "10A 250VAC / 10A 30VDC",
+        "Inputs": "IN1, IN2, active LOW",
+        "Isolation": "Optocouplers, JD-VCC jumper for separate coil supply"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Power VCC from 5V. Most modules trigger fine from ESP32 3.3V GPIOs. Be careful with mains voltage."
+    },
+    {
+      "id": "resistor-220",
+      "name": "Resistor 220Ω",
+      "category": "Passive",
+      "quantity": 10,
+      "voltage": "",
+      "interfaces": [],
+      "description": "Typical current-limiting resistor for LEDs.",
+      "specs": {
+        "Color code": "Red, red, brown, gold",
+        "Power": "1/4 W (typical)"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "resistor-1k",
+      "name": "Resistor 1kΩ",
+      "category": "Passive",
+      "quantity": 10,
+      "voltage": "",
+      "interfaces": [],
+      "description": "General purpose resistor (transistor bases, dividers).",
+      "specs": {
+        "Color code": "Brown, black, red, gold",
+        "Power": "1/4 W (typical)"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "resistor-10k",
+      "name": "Resistor 10kΩ",
+      "category": "Passive",
+      "quantity": 10,
+      "voltage": "",
+      "interfaces": [],
+      "description": "Typical pull-up / pull-down resistor.",
+      "specs": {
+        "Color code": "Brown, black, orange, gold",
+        "Power": "1/4 W (typical)"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "led-red",
+      "name": "LED red 5mm",
+      "category": "LED",
+      "quantity": 5,
+      "voltage": "~2.0V forward",
+      "interfaces": ["Digital", "PWM"],
+      "description": "Standard through-hole LED.",
+      "specs": {
+        "Forward voltage": "~1.8–2.2V",
+        "Current": "20 mA max",
+        "Resistor": "220Ω at 3.3V or 5V"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Long leg = anode (+)."
+    },
+    {
+      "id": "led-yellow",
+      "name": "LED yellow 5mm",
+      "category": "LED",
+      "quantity": 5,
+      "voltage": "~2.0V forward",
+      "interfaces": ["Digital", "PWM"],
+      "description": "Standard through-hole LED.",
+      "specs": {
+        "Forward voltage": "~1.8–2.2V",
+        "Current": "20 mA max",
+        "Resistor": "220Ω at 3.3V or 5V"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Long leg = anode (+)."
+    },
+    {
+      "id": "led-green",
+      "name": "LED green 5mm",
+      "category": "LED",
+      "quantity": 5,
+      "voltage": "~2.0V forward",
+      "interfaces": ["Digital", "PWM"],
+      "description": "Standard through-hole LED.",
+      "specs": {
+        "Forward voltage": "~1.8–2.2V (pure green ~3V)",
+        "Current": "20 mA max",
+        "Resistor": "220Ω at 3.3V or 5V"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Long leg = anode (+)."
+    },
+    {
+      "id": "led-rgb",
+      "name": "LED RGB 5mm",
+      "category": "LED",
+      "quantity": 2,
+      "voltage": "R ~2V, G/B ~3V forward",
+      "interfaces": ["PWM"],
+      "description": "Three LEDs in one package, 4 pins. Mix colors with PWM.",
+      "specs": {
+        "Pins": "R, common, G, B (longest leg = common)",
+        "Type": "Common cathode or common anode (check with a multimeter)",
+        "Resistor": "220Ω per color"
+      },
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "dfplayer-mini",
+      "name": "DFPlayer Mini MP3 module",
+      "category": "Audio",
+      "quantity": 1,
+      "voltage": "3.2–5V",
+      "interfaces": ["UART"],
+      "description": "Plays MP3/WAV files from a microSD card, with a built-in mono amplifier.",
+      "specs": {
+        "Formats": "MP3, WAV, WMA",
+        "Storage": "microSD up to 32 GB (FAT16/FAT32)",
+        "Amplifier": "3 W mono (SPK1/SPK2)",
+        "DAC": "24-bit, also DAC_L/DAC_R line out",
+        "Control": "UART 9600 baud, or buttons / AD keys",
+        "Volume": "30 levels, 6 EQ presets",
+        "Files": "Up to 100 folders × 255 tracks"
+      },
+      "links": [
+        { "label": "DFRobot wiki", "url": "https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299" },
+        { "label": "DFRobotDFPlayerMini library", "url": "https://github.com/DFRobot/DFRobotDFPlayerMini" }
+      ],
+      "notes": "Put a 1kΩ resistor on the RX line to cut noise. Can drive the 8Ω 5W speaker."
+    },
+    {
+      "id": "cable-micro-usb",
+      "name": "Micro USB cable",
+      "category": "Cable",
+      "quantity": 1,
+      "voltage": "",
+      "interfaces": ["USB"],
+      "description": "For powering and flashing the ESP32 dev board.",
+      "specs": {},
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "jumper-fm",
+      "name": "Jumper wires female-male",
+      "category": "Cable",
+      "quantity": 10,
+      "voltage": "",
+      "interfaces": [],
+      "description": "Dupont jumper wires.",
+      "specs": {},
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "jumper-ff",
+      "name": "Jumper wires female-female",
+      "category": "Cable",
+      "quantity": 10,
+      "voltage": "",
+      "interfaces": [],
+      "description": "Dupont jumper wires.",
+      "specs": {},
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": ""
+    },
+    {
+      "id": "jumper-mm",
+      "name": "Jumper wires male-male",
+      "category": "Cable",
+      "quantity": null,
+      "voltage": "",
+      "interfaces": [],
+      "description": "Dupont jumper wires for breadboards.",
+      "specs": {},
+      "links": [],
+      "source": "ESP32 starter kit",
+      "notes": "Quantity not specified in the kit list."
+    }
+  ]
+}
