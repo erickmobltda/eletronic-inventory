@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-27 — Auto-fill a component from its name or a photo
+
+**Why:** adding a part meant typing category, voltage, interfaces, specs and links by hand.
+
+- Component form: **Auto-fill** (from the typed name) and **Photo** (take or pick a picture) next to the name. Only empty fields are filled; specs and links are added without duplicates; quantity is never touched. Hidden for the demo account.
+- Backend: erickmob-api `POST /inventory/identify` (Claude Haiku 5.5). Photos are scaled to 1568 px JPEG in the browser first.
+- New build env `VITE_API_URL` (`https://api.erickmob.dev`, in the Pages workflow).
+
 ## 2026-10-25 — Login + Firestore, edit in the browser
 
 **Why:** the page was static, so nothing changed in the browser could be saved; every edit meant committing `data/inventory.json`. Now each user signs in with the shared erickmob login and edits their own components and projects.

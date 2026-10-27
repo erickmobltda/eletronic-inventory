@@ -4,7 +4,7 @@ import { auth } from '../lib/firebase';
 
 // Public sandbox account shared by the erickmob apps (custom claim `demo`); the
 // Firestore rules keep it inside its own inventory. `npm run reset-demo` restores it.
-const DEMO_EMAIL = 'demo@ledgenator.app';
+export const DEMO_EMAIL = 'demo@ledgenator.app';
 const DEMO_PASSWORD = 'demo1234';
 
 // Same login as every erickmob app (Firebase project erickmob-apps). Sign-up is

@@ -1,8 +1,12 @@
 import * as React from 'react';
+import { auth } from '../lib/firebase';
 import { deleteComponent, saveComponent } from '../lib/store';
+import { identify } from '../lib/api';
+import { mergeEmpty, type Pair } from '../lib/autofill';
 import { normalizeComponent, uniqueId } from '../lib/inventory';
 import type { Component, Project } from '../lib/types';
 import { Modal } from './bits';
+import { DEMO_EMAIL } from './LoginPage';
 
 type Props = {
   item: Component | null; // null = new component
@@ -12,8 +16,6 @@ type Props = {
   onSaved: (id: string) => void;
   onDeleted: () => void;
 };
-
-type Pair = { a: string; b: string };
 
 export function ComponentForm({ item, components, projects, onClose, onSaved, onDeleted }: Props) {
   const [name, setName] = React.useState(item?.name ?? '');
@@ -28,6 +30,10 @@ export function ComponentForm({ item, components, projects, onClose, onSaved, on
   const [links, setLinks] = React.useState<Pair[]>((item?.links ?? []).map((l) => ({ a: l.label, b: l.url })));
   const [error, setError] = React.useState('');
   const [busy, setBusy] = React.useState(false);
+  const [filling, setFilling] = React.useState(false);
+  const photoInput = React.useRef<HTMLInputElement>(null);
+  // The demo account can't call erickmob-api (it spends AI credits).
+  const canFill = auth.currentUser?.email !== DEMO_EMAIL;
 
   const categories = [...new Set(components.map((c) => c.category))].sort();
 
@@ -35,6 +41,18 @@ export function ComponentForm({ item, components, projects, onClose, onSaved, on
     setBusy(true);
     setError('');
     try { await fn(); } catch (err) { setError((err as Error).message); } finally { setBusy(false); }
+  }
+
+  async function autofill(photo: File | null) {
+    if (!photo && !name.trim()) return setError('Type a name first, or use a photo.');
+    setFilling(true);
+    setError('');
+    try {
+      const found = await identify(name.trim(), photo, categories);
+      const next = mergeEmpty({ name, category, voltage, interfaces, description, notes, specs, links }, found);
+      setName(next.name); setCategory(next.category); setVoltage(next.voltage); setInterfaces(next.interfaces);
+      setDescription(next.description); setNotes(next.notes); setSpecs(next.specs); setLinks(next.links);
+    } catch (err) { setError((err as Error).message); } finally { setFilling(false); }
   }
 
   function submit(e: React.FormEvent) {
@@ -75,7 +93,20 @@ export function ComponentForm({ item, components, projects, onClose, onSaved, on
   return (
     <Modal title={item ? `Edit ${item.name}` : 'New component'} onClose={onClose}>
       <form className="form" onSubmit={submit}>
-        <label className="field">Name *<input value={name} onChange={(e) => setName(e.target.value)} autoFocus /></label>
+        <div className="field">
+          <label htmlFor="component-name">Name *</label>
+          <div className="pair">
+            <input id="component-name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+            {canFill && <>
+              <button type="button" className="btn" disabled={filling} onClick={() => void autofill(null)}
+                title="Fill the empty fields from the name">{filling ? 'Looking up…' : 'Auto-fill'}</button>
+              <button type="button" className="btn" disabled={filling} onClick={() => photoInput.current?.click()}
+                title="Fill the empty fields from a photo">Photo</button>
+              <input ref={photoInput} type="file" accept="image/*" hidden
+                onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) void autofill(f); }} />
+            </>}
+          </div>
+        </div>
         <div className="two">
           <label className="field">Category *
             <input list="categories" value={category} onChange={(e) => setCategory(e.target.value)} />
