@@ -15,6 +15,7 @@ export type Component = {
   links: Link[];
   notes: string;
   source: string;
+  photo: string; // public CDN URL, '' = none
   created_at?: string;
   updated_at?: string;
 };
@@ -30,6 +31,7 @@ export type Project = {
   description: string;
   repo: string;
   components: Allocation[];
+  photo: string; // public CDN URL, '' = none
   created_at?: string;
   updated_at?: string;
 };

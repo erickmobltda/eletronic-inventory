@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { deleteProject, saveProject } from '../lib/store';
+import { photoIO } from '../lib/api';
+import { auth } from '../lib/firebase';
 import { allocated, normalizeProject, PROJECT_STATUS, uniqueId } from '../lib/inventory';
+import { withPhoto, withoutPhoto, type PhotoChange } from '../lib/photos';
 import type { Allocation, Component, Project, ProjectStatus } from '../lib/types';
 import { Modal } from './bits';
+import { DEMO_EMAIL } from './LoginPage';
+import { PhotoField } from './PhotoField';
 
 type Props = {
   item: Project | null; // null = new project
@@ -20,9 +25,12 @@ export function ProjectForm({ item, components, projects, onClose, onSaved, onDe
   const [repo, setRepo] = React.useState(item?.repo ?? '');
   const [parts, setParts] = React.useState<Allocation[]>(item?.components ?? []);
   const [adding, setAdding] = React.useState('');
+  const [photo, setPhoto] = React.useState<PhotoChange>(undefined);
   const [error, setError] = React.useState('');
   const [busy, setBusy] = React.useState(false);
 
+  // The demo account can't store files in erickmob-api.
+  const canPhoto = auth.currentUser?.email !== DEMO_EMAIL;
   const byId = Object.fromEntries(components.map((c) => [c.id, c]));
   const available = components.filter((c) => !parts.some((a) => a.id === c.id)).sort((a, b) => a.name.localeCompare(b.name));
   // Units left for this project: what is owned minus what the other projects take.
@@ -39,18 +47,25 @@ export function ProjectForm({ item, components, projects, onClose, onSaved, onDe
     const id = item?.id ?? uniqueId(name, projects.map((p) => p.id));
     const p = normalizeProject(id, { ...item, name, status, description, repo, components: parts });
     if (!p.name) return setError('Name is required.');
-    void run(async () => { await saveProject(p, components, projects); onSaved(id); });
+    void run(async () => {
+      await withPhoto(p.photo, photo, (url) => saveProject({ ...p, photo: url }, components, projects), photoIO);
+      onSaved(id);
+    });
   }
 
   function remove() {
     if (!item || !confirm(`Delete project "${item.name}"? Its components become free again.`)) return;
-    void run(async () => { await deleteProject(item.id); onDeleted(); });
+    void run(async () => {
+      await withoutPhoto(item.photo, () => deleteProject(item.id), photoIO);
+      onDeleted();
+    });
   }
 
   return (
     <Modal title={item ? `Edit ${item.name}` : 'New project'} onClose={onClose}>
       <form className="form" onSubmit={submit}>
         <label className="field">Name *<input value={name} onChange={(e) => setName(e.target.value)} autoFocus /></label>
+        {canPhoto && <PhotoField current={item?.photo ?? ''} change={photo} onChange={setPhoto} />}
         <div className="two">
           <label className="field">Status
             <select value={status} onChange={(e) => setStatus(e.target.value as ProjectStatus)}>

@@ -9,10 +9,12 @@ My electronic components, which ones are free and which are used in projects. Ea
 - **Frontend:** React · Vite · TypeScript (plain CSS)
 - **Login:** Firebase Auth, project `erickmob-apps` — the same email and password as every other erickmob app. Sign-up is off; accounts are created in the Firebase console. **Try the demo** signs in with the public demo account (see [Live demo](#live-demo)).
 - **Data:** Firestore, per user:
-  - `apps/inventory/users/{uid}/components/{id}` — name, category, quantity (`null` = unknown), voltage, interfaces, description, specs, links, notes, source
-  - `apps/inventory/users/{uid}/projects/{id}` — name, status, description, repo, `components: [{ id, qty }]`
+  - `apps/inventory/users/{uid}/components/{id}` — name, category, quantity (`null` = unknown), voltage, interfaces, description, specs, links, notes, source, photo
+  - `apps/inventory/users/{uid}/projects/{id}` — name, status, description, repo, `components: [{ id, qty }]`, photo
 - **Rules:** in [erickmob-api](https://github.com/erickmobltda/erickmob-api) `firebase/firestore.rules` (owner only, plus the checks below).
-- **Auto-fill:** erickmob-api `POST /inventory/identify` (Claude Haiku 5.5, behind the Firebase login). Everything else reads and writes Firestore directly.
+- **Auto-fill:** erickmob-api `POST /inventory/identify` (Claude Haiku 5.5, behind the Firebase login).
+- **Photos:** erickmob-api `POST/DELETE /inventory/photos/...` stores them in the public Cloudflare R2 bucket `erickmob-cdn` (`https://cdn.erickmob.dev/inventory/{uid}/{uuid}.webp`); the doc keeps the URL in `photo`.
+- Everything else reads and writes Firestore directly.
 
 ## Live demo
 
@@ -33,6 +35,7 @@ It replaces the demo account's `components` and `projects` with `scripts/demo-se
 - A project can't use more units than you own (the old `scripts/validate.mjs` check), and a component can't be deleted while a project still lists it.
 - Link a component to a project from the project's **Edit** form or from the component's detail drawer (**Add to project**).
 - **Auto-fill** (next to the name in the component form): type a name such as `Raspberry Pi 5`, or tap **Photo** to take or pick a picture, and Claude fills category, voltage, interfaces, description, specs, links and notes. It only fills empty fields (specs and links are added, quantity is never touched); review and **Save**. It comes from the model's own knowledge, so double-check specs and links for obscure parts. Not shown to the demo account.
+- **Photo** (component and project forms): pick or take a picture; it's resized to 800 px in the browser and uploaded on **Save**. A thumbnail shows in the table, cards and projects list, and a large one in the drawer. Replacing, removing or deleting the item deletes the old file. Photos are public to anyone with the link (random URLs). Not shown to the demo account.
 - Column order, sort and theme are saved per browser (localStorage).
 
 ## Required env (repo secrets)

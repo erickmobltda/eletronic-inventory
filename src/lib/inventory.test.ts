@@ -62,8 +62,8 @@ describe('ids', () => {
 describe('normalize', () => {
   it('fills missing fields so Firestore never sees undefined', () => {
     const c = normalizeComponent('x', { name: ' X ', category: 'Cat' });
-    expect(c).toMatchObject({ name: 'X', quantity: null, interfaces: [], specs: {}, links: [], notes: '', source: '' });
-    expect(normalizeProject('p', { name: 'P', status: 'bogus' as never }).status).toBe('active');
+    expect(c).toMatchObject({ name: 'X', quantity: null, interfaces: [], specs: {}, links: [], notes: '', source: '', photo: '' });
+    expect(normalizeProject('p', { name: 'P', status: 'bogus' as never })).toMatchObject({ status: 'active', photo: '' });
   });
 });
 

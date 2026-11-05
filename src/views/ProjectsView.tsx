@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PROJECT_STATUS } from '../lib/inventory';
 import type { DerivedComponent, Project } from '../lib/types';
-import { qty } from '../components/bits';
+import { qty, Thumb } from '../components/bits';
 
 type Props = {
   projects: Project[];
@@ -26,6 +26,7 @@ export function ProjectsView({ projects, byId, unused, scrollTo, onScrolled, onO
       {projects.map((p) => (
         <div key={p.id} className="project" id={`project-${p.id}`}>
           <div className="head">
+            <Thumb src={p.photo} size="md" />
             <h2>{p.name}</h2>
             <span className={`badge ${p.status}`}>{PROJECT_STATUS[p.status]}</span>
             {p.repo && <a href={p.repo} target="_blank" rel="noopener">Repository ↗</a>}
@@ -37,7 +38,7 @@ export function ProjectsView({ projects, byId, unused, scrollTo, onScrolled, onO
             {p.components.map(({ id, qty: q }) => {
               const c = byId[id];
               return c
-                ? <li key={id} onClick={() => onOpen(id)}><span>{c.name}</span><span className="muted">×{q}</span></li>
+                ? <li key={id} onClick={() => onOpen(id)}><span className="with-thumb"><Thumb src={c.photo} />{c.name}</span><span className="muted">×{q}</span></li>
                 : <li key={id}><span>Unknown component <code>{id}</code></span></li>;
             })}
             {!p.components.length && <li className="muted">No components yet</li>}
@@ -48,7 +49,7 @@ export function ProjectsView({ projects, byId, unused, scrollTo, onScrolled, onO
         <div className="head"><h2>Not in any project</h2><span className="badge free">{unused.length}</span></div>
         <p>Components free to use in the next build.</p>
         <ul>
-          {unused.map((c) => <li key={c.id} onClick={() => onOpen(c.id)}><span>{c.name}</span><span className="muted">×{qty(c.quantity)}</span></li>)}
+          {unused.map((c) => <li key={c.id} onClick={() => onOpen(c.id)}><span className="with-thumb"><Thumb src={c.photo} />{c.name}</span><span className="muted">×{qty(c.quantity)}</span></li>)}
         </ul>
       </div>
     </>

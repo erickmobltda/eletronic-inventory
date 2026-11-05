@@ -93,6 +93,7 @@ export function normalizeComponent(id: string, d: Partial<Component>): Component
     links: Array.isArray(d.links) ? d.links : [],
     notes: d.notes ?? '',
     source: d.source ?? '',
+    photo: d.photo ?? '',
     created_at: d.created_at,
     updated_at: d.updated_at,
   };
@@ -106,6 +107,7 @@ export function normalizeProject(id: string, d: Partial<Project>): Project {
     description: d.description ?? '',
     repo: d.repo ?? '',
     components: Array.isArray(d.components) ? d.components.map((a) => ({ id: a.id, qty: a.qty ?? 1 })) : [],
+    photo: d.photo ?? '',
     created_at: d.created_at,
     updated_at: d.updated_at,
   };

@@ -71,6 +71,7 @@ export function Drawer({ c, components, projects, onClose, onEdit, onProject }: 
         <div className="drawer-inner">
           <button ref={closeRef} className="btn ghost close" aria-label="Close" onClick={onClose}>✕</button>
           <h2>{c.name}</h2>
+          {c.photo && <a className="drawer-photo" href={c.photo} target="_blank" rel="noopener" title="Open full size"><img src={c.photo} alt={c.name} /></a>}
           <div><Badge status={c.status} /> <span className="chip">{c.category}</span>{c.source && <> <span className="chip">{c.source}</span></>}</div>
           {c.description && <p>{c.description}</p>}
           <div className="qty-row">
