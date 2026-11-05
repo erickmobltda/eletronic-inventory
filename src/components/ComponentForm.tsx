@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { auth } from '../lib/firebase';
 import { deleteComponent, saveComponent } from '../lib/store';
-import { identify } from '../lib/api';
+import { identify, photoIO } from '../lib/api';
 import { mergeEmpty, type Pair } from '../lib/autofill';
 import { normalizeComponent, uniqueId } from '../lib/inventory';
+import { withPhoto, withoutPhoto, type PhotoChange } from '../lib/photos';
 import type { Component, Project } from '../lib/types';
 import { Modal } from './bits';
+import { PhotoField } from './PhotoField';
 import { DEMO_EMAIL } from './LoginPage';
 
 type Props = {
@@ -28,11 +30,12 @@ export function ComponentForm({ item, components, projects, onClose, onSaved, on
   const [notes, setNotes] = React.useState(item?.notes ?? '');
   const [specs, setSpecs] = React.useState<Pair[]>(Object.entries(item?.specs ?? {}).map(([a, b]) => ({ a, b })));
   const [links, setLinks] = React.useState<Pair[]>((item?.links ?? []).map((l) => ({ a: l.label, b: l.url })));
+  const [photo, setPhoto] = React.useState<PhotoChange>(undefined);
   const [error, setError] = React.useState('');
   const [busy, setBusy] = React.useState(false);
   const [filling, setFilling] = React.useState(false);
   const photoInput = React.useRef<HTMLInputElement>(null);
-  // The demo account can't call erickmob-api (it spends AI credits).
+  // The demo account can't call erickmob-api (it spends AI credits and stores files).
   const canFill = auth.currentUser?.email !== DEMO_EMAIL;
 
   const categories = [...new Set(components.map((c) => c.category))].sort();
@@ -69,12 +72,18 @@ export function ComponentForm({ item, components, projects, onClose, onSaved, on
       links: links.filter((p) => p.b.trim()).map((p) => ({ label: p.a.trim() || p.b.trim(), url: p.b.trim() })),
     });
     if (!c.name || !c.category) return setError('Name and category are required.');
-    void run(async () => { await saveComponent(c, components, projects); onSaved(id); });
+    void run(async () => {
+      await withPhoto(c.photo, photo, (url) => saveComponent({ ...c, photo: url }, components, projects), photoIO);
+      onSaved(id);
+    });
   }
 
   function remove() {
     if (!item || !confirm(`Delete "${item.name}"?`)) return;
-    void run(async () => { await deleteComponent(item.id, projects); onDeleted(); });
+    void run(async () => {
+      await withoutPhoto(item.photo, () => deleteComponent(item.id, projects), photoIO);
+      onDeleted();
+    });
   }
 
   const pairs = (rows: Pair[], set: (r: Pair[]) => void, a: string, b: string) => (
@@ -107,6 +116,7 @@ export function ComponentForm({ item, components, projects, onClose, onSaved, on
             </>}
           </div>
         </div>
+        {canFill && <PhotoField current={item?.photo ?? ''} change={photo} onChange={setPhoto} />}
         <div className="two">
           <label className="field">Category *
             <input list="categories" value={category} onChange={(e) => setCategory(e.target.value)} />

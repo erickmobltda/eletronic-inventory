@@ -35,3 +35,7 @@ export function Modal({ title, onClose, children }: { title: string; onClose: ()
     </>
   );
 }
+
+/** Small square photo; an empty box keeps rows aligned when there is none. */
+export const Thumb = ({ src, size = 'sm' }: { src: string; size?: 'sm' | 'md' | 'lg' }) =>
+  src ? <img className={`thumb ${size}`} src={src} alt="" loading="lazy" /> : <span className={`thumb ${size} none`} aria-hidden />;

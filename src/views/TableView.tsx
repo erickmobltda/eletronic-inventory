@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { COLUMNS, defaultCols, type Col, type ColumnKey, type Sort } from '../lib/view';
 import type { DerivedComponent } from '../lib/types';
-import { Badge, Chips, ProjectChips, qty } from '../components/bits';
+import { Badge, Chips, ProjectChips, qty, Thumb } from '../components/bits';
 
 type Props = {
   list: DerivedComponent[];
@@ -23,6 +23,7 @@ function cell(c: DerivedComponent, key: ColumnKey, onProject: (id: string) => vo
     case 'status': return <Badge status={c.status} />;
     case 'projects': return <ProjectChips c={c} onProject={onProject} />;
     case 'interfaces': return <Chips items={c.interfaces} />;
+    case 'name': return <span className="with-thumb"><Thumb src={c.photo} />{c.name}</span>;
     default: return c[key];
   }
 }

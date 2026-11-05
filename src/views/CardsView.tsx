@@ -1,5 +1,5 @@
 import type { DerivedComponent } from '../lib/types';
-import { Badge, Chips, qty } from '../components/bits';
+import { Badge, Chips, qty, Thumb } from '../components/bits';
 
 export function CardsView({ list, total, onOpen }: { list: DerivedComponent[]; total: number; onOpen: (id: string) => void }) {
   if (!list.length) return <div className="empty">No components match.</div>;
@@ -9,7 +9,7 @@ export function CardsView({ list, total, onOpen }: { list: DerivedComponent[]; t
       <div className="grid">
         {list.map((c) => (
           <div key={c.id} className="card" onClick={() => onOpen(c.id)}>
-            <div className="row"><div className="title">{c.name}</div><Badge status={c.status} /></div>
+            <div className="row"><div className="with-thumb"><Thumb src={c.photo} size="md" /><div className="title">{c.name}</div></div><Badge status={c.status} /></div>
             <div className="desc">{c.description}</div>
             <div><Chips items={c.interfaces} /></div>
             <div className="meta">

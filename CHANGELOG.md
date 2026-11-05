@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-05 — A photo on each component and project
+
+**Why:** a photo makes a part or a build much easier to spot than its name.
+
+- Component and project forms: a **Photo** field to pick or take a picture, with a preview, **Change** and **Remove**. Nothing is uploaded until **Save**. Hidden for the demo account.
+- A thumbnail next to the name in the table, cards and projects list (an empty box when there's none), and a large photo at the top of the drawer (click for full size).
+- Storage: the browser resizes the photo to 800 px WebP (JPEG on Safari, which can't always encode WebP) and uploads it with erickmob-api `POST /inventory/photos`. It lands in the public Cloudflare R2 bucket `erickmob-cdn` at `https://cdn.erickmob.dev/inventory/{uid}/{uuid}.webp`, and its URL is saved as the new `photo` field (`''` = none).
+- Replacing or removing a photo, or deleting the item, deletes the old file (`DELETE /inventory/photos/...`, best effort). If the save fails, the file that was just uploaded is deleted again.
+- The names are random, so the URLs can't be guessed, but anyone with a link can see the photo.
+
 ## 2026-10-27 — Auto-fill a component from its name or a photo
 
 **Why:** adding a part meant typing category, voltage, interfaces, specs and links by hand.
